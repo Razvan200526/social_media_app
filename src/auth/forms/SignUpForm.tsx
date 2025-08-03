@@ -7,11 +7,20 @@ import {
   Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { Loader } from "../../components/shared/Loader"
+import { Link, useNavigate } from "react-router-dom"
+import { toast } from "sonner"
+import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations"
+import { useUserContext } from "@/context/authContext"
 
 const SignUpForm = () => {
 
-  const [isLoading, _setIsLoading] = useState<boolean>(false);
+  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
+
+  const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
+
+  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
     defaultValues: {
@@ -22,18 +31,36 @@ const SignUpForm = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof SignUpValidation>) {
+  async function onSubmit(values: z.infer<typeof SignUpValidation>) {
+    const newUser = await createUserAccount(values);
+    if (!newUser) {
+      return toast("Sign up failed,please try again.");
+    }
+    const session = await signInAccount({
+      email: values.email,
+      password: values.password
+    });
 
-    console.log(values)
+    if (!session) {
+      return toast("Sign up failed,please try again.");
+    }
+
+    const isLoggedIn = await checkAuthUser();
+    if (isLoggedIn) {
+      form.reset();
+      navigate('/');
+    } else {
+      toast("Sign up failed.Please try again.");
+    }
   }
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <img src="/public/assets/images/logo.svg" alt="logo" />
+        <img src="/assets/images/logo.svg" alt="logo" />
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Create a new Account
         </h2>
-        <p className="text-light-3 small-medium md:base-regular mt-2">To use SnapGram enter your account details</p>
+        <p className="text-light-3 small-medium md:base-regular mt-2">To use Linkly enter your account details</p>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4" >
           <FormField
             control={form.control}
@@ -88,14 +115,19 @@ const SignUpForm = () => {
             )}
           />
 
-          <Button type="submit" className="shad-button_primary">Submit</Button>
-          {isLoading ? (
-            <div className="flex-center gap-2">
-              Loading...
-            </div>
-          ) : "Sign up"}
+          <Button type="submit" className="shad-button_primary">
+            {isCreatingAccount ? (
+              <div className="flex-center gap-2">
+                <Loader />
+              </div>
+            ) : "Sign up"}
+          </Button>
         </form>
       </div>
+      <p className="text-small-regular text-light-2 text-center mt-2">
+        Already have an account?
+        <Link to={"/sign-in"} className="text-primary-500 ml-1 text-small-semi-bold">Sign In</Link>
+      </p>
     </Form>
 
   )

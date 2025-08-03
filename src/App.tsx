@@ -4,6 +4,8 @@ import SignUpForm from "./auth/forms/SignUpForm"
 import AuthLayout from "./auth/AuthLayout"
 import { RootLayout } from "./root/RootLayout"
 import { Home } from "./root/Pages/Home"
+import { Toaster } from "./components/ui/sonner"
+
 export const App = () => {
   return (
     <main className="flex h-screen">
@@ -18,6 +20,7 @@ export const App = () => {
           <Route path="/" element={<Home />} />
         </Route>
       </Routes>
+      <Toaster />
     </main>
   )
 }
