@@ -1,5 +1,3 @@
-import type { Models } from "appwrite";
-
 export type INewUser = {
   name: string;
   email: string;
@@ -8,13 +6,13 @@ export type INewUser = {
 };
 
 export type IContextType = {
-  user: IUser,
-  isLoading: boolean,
-  setUser: React.Dispatch<React.SetStateAction<IUser>>,
-  isAuthentificated: boolean,
-  setIsAuthentificated: React.Dispatch<React.SetStateAction<boolean>>,
-  checkAuthUser: () => Promise<boolean>
-}
+  user: IUser;
+  isLoading: boolean;
+  setUser: React.Dispatch<React.SetStateAction<IUser>>;
+  isAuthentificated: boolean;
+  setIsAuthentificated: React.Dispatch<React.SetStateAction<boolean>>;
+  checkAuthUser: () => Promise<boolean>;
+};
 
 export type IUser = {
   id: string;
@@ -32,20 +30,22 @@ export type INavLink = {
 };
 
 export type INewPost = {
-  userId: string,
-  caption: string,
+  userId: string;
+  caption: string;
   file: File[];
   location?: string;
   tags?: string;
-}
-
+};
+export type IPost = {
+  id: string;
+  userId: string;
+  caption: string;
+  imageUrl: string;
+  location?: string;
+  tags?: string[];
+  createdAt: string;
+};
 export type PostFormProps = {
-  post?: Models.Document & {
-    caption?: string;
-    imageURL?: string;
-    location?: string;
-    tags?: string[];
-  };
+  post?: IPost;
   action: "Create" | "Update";
 };
-

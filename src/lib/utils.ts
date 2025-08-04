@@ -11,3 +11,6 @@ export function convertDate(date: string): string {
   return result;
 }
 
+export const checkIsLiked = (likeList: string[], userId: string) => {
+  return likeList.includes(userId);
+};

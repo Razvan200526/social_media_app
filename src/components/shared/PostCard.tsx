@@ -2,12 +2,13 @@ import type { Models } from "appwrite";
 import { Link } from "react-router-dom";
 import { convertDate } from "@/lib/utils";
 import { useUserContext } from "@/context/AuthContext";
+import PostStats from "./PostStats";
 type PostCardProps = {
   post: Models.Document;
 };
 
 const PostCard = ({ post }: PostCardProps) => {
-  const user = useUserContext();
+  const { user } = useUserContext();
 
   if (!post.creator) return;
   console.log(post);

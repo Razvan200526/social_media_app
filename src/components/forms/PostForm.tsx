@@ -20,9 +20,8 @@ import { useUserContext } from "@/context/AuthContext";
 import { toast } from "sonner";
 import type { PostFormProps } from "@/types";
 
-const PostForm = ({ post }: PostFormProps) => {
-  const { mutateAsync: createPost, isPending: isLoadingCreate } =
-    useCreatePost();
+const PostForm = ({ post, action }: PostFormProps) => {
+  const { mutateAsync: createPost } = useCreatePost();
   const navigate = useNavigate();
   const { user } = useUserContext();
   const form = useForm<z.infer<typeof PostValidation>>({
@@ -84,7 +83,7 @@ const PostForm = ({ post }: PostFormProps) => {
               <FormControl>
                 <FileUploader
                   fieldChange={field.onChange}
-                  mediaURL={post?.imageURL || ""}
+                  mediaURL={post?.imageUrl || ""}
                 />
               </FormControl>
               <FormMessage className="shad-form_message" />
