@@ -1,23 +1,32 @@
-import { Button } from "@/components/ui/button"
-import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { SignUpValidation } from "@/lib/validation"
+import { Button } from "@/components/ui/button";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { SignUpValidation } from "@/lib/validation";
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Loader } from "../../components/shared/Loader"
-import { Link, useNavigate } from "react-router-dom"
-import { toast } from "sonner"
-import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations"
-import { useUserContext } from "@/context/authContext"
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Loader } from "../../components/shared/Loader";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import {
+  useCreateUserAccount,
+  useSignInAccount,
+} from "@/lib/react-query/queriesAndMutations";
+import { useUserContext } from "@/context/AuthContext";
 
 const SignUpForm = () => {
+  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } =
+    useCreateUserAccount();
 
-  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
-
-  const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
+  const { mutateAsync: signInAccount, isPending: isSigningIn } =
+    useSignInAccount();
 
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
   const navigate = useNavigate();
@@ -27,9 +36,9 @@ const SignUpForm = () => {
       name: "",
       username: "",
       email: "",
-      password: ""
+      password: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof SignUpValidation>) {
     const newUser = await createUserAccount(values);
@@ -38,7 +47,7 @@ const SignUpForm = () => {
     }
     const session = await signInAccount({
       email: values.email,
-      password: values.password
+      password: values.password,
     });
 
     if (!session) {
@@ -48,7 +57,7 @@ const SignUpForm = () => {
     const isLoggedIn = await checkAuthUser();
     if (isLoggedIn) {
       form.reset();
-      navigate('/');
+      navigate("/");
     } else {
       toast("Sign up failed.Please try again.");
     }
@@ -60,8 +69,13 @@ const SignUpForm = () => {
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Create a new Account
         </h2>
-        <p className="text-light-3 small-medium md:base-regular mt-2">To use Linkly enter your account details</p>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4" >
+        <p className="text-light-3 small-medium md:base-regular mt-2">
+          To use Linkly enter your account details
+        </p>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-5 w-full mt-4"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -120,17 +134,23 @@ const SignUpForm = () => {
               <div className="flex-center gap-2">
                 <Loader />
               </div>
-            ) : "Sign up"}
+            ) : (
+              "Sign up"
+            )}
           </Button>
         </form>
       </div>
       <p className="text-small-regular text-light-2 text-center mt-2">
         Already have an account?
-        <Link to={"/sign-in"} className="text-primary-500 ml-1 text-small-semi-bold">Sign In</Link>
+        <Link
+          to={"/sign-in"}
+          className="text-primary-500 ml-1 text-small-semi-bold"
+        >
+          Sign In
+        </Link>
       </p>
     </Form>
+  );
+};
 
-  )
-}
-
-export default SignUpForm
+export default SignUpForm;

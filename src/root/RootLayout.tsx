@@ -1,8 +1,8 @@
-import TopBar from "@/components/shared/TopBar"
-import LeftSidebar from "@/components/shared/LeftSidebar"
+import TopBar from "@/components/shared/TopBar";
+import LeftSidebar from "@/components/shared/LeftSidebar";
 
-import { Outlet } from "react-router-dom"
-import BottomBar from "@/components/shared/BottomBar"
+import { Outlet } from "react-router-dom";
+import BottomBar from "@/components/shared/BottomBar";
 export const RootLayout = () => {
   return (
     <div className="w-full md:flex">
@@ -15,5 +15,5 @@ export const RootLayout = () => {
 
       <BottomBar />
     </div>
-  )
-}
+  );
+};

@@ -1,11 +1,21 @@
-import { Route, Routes } from "react-router-dom"
-import SignInForm from "./auth/forms/SignInForm"
-import SignUpForm from "./auth/forms/SignUpForm"
-import AuthLayout from "./auth/AuthLayout"
-import { RootLayout } from "./root/RootLayout"
-import { Home } from "./root/Pages/Home"
-import { Toaster } from "./components/ui/sonner"
-
+import { Route, Routes } from "react-router-dom";
+import SignInForm from "./auth/forms/SignInForm";
+import SignUpForm from "./auth/forms/SignUpForm";
+import AuthLayout from "./auth/AuthLayout";
+import { RootLayout } from "./root/RootLayout";
+import { Toaster } from "./components/ui/sonner";
+import {
+  Home,
+  Explore,
+  Saved,
+  AllUsers,
+  CreatePost,
+  EditPost,
+  PostDetails,
+  Profile,
+  UpdateProfile,
+} from "./root/Pages";
+import "./globals.css";
 export const App = () => {
   return (
     <main className="flex h-screen">
@@ -16,12 +26,19 @@ export const App = () => {
           <Route path="/sign-up" element={<SignUpForm />} />
         </Route>
         {/* {private routes} */}
-        <Route element={<RootLayout />} >
+        <Route element={<RootLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/saved" element={<Saved />} />
+          <Route path="/all-users" element={<AllUsers />} />
+          <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/update-post/:id" element={<EditPost />} />
+          <Route path="/posts/:id" element={<PostDetails />} />
+          <Route path="/profile/:id/*" element={<Profile />} />
+          <Route path="/update-profile/:id" element={<UpdateProfile />} />
         </Route>
       </Routes>
       <Toaster />
     </main>
-  )
-}
-
+  );
+};
