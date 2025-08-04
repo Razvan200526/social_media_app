@@ -1,3 +1,5 @@
+import type { Models } from "appwrite";
+
 export type INewUser = {
   name: string;
   email: string;
@@ -36,3 +38,14 @@ export type INewPost = {
   location?: string;
   tags?: string;
 }
+
+export type PostFormProps = {
+  post?: Models.Document & {
+    caption?: string;
+    imageURL?: string;
+    location?: string;
+    tags?: string[];
+  };
+  action: "Create" | "Update";
+};
+

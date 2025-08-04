@@ -15,20 +15,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/FileUploader";
 import { PostValidation } from "@/lib/validation";
-import type { Models } from "appwrite";
 import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 import { toast } from "sonner";
+import type { PostFormProps } from "@/types";
 
-type PostFormProps = {
-  post?: Models.Document & {
-    caption?: string;
-    imageURL?: string;
-    location?: string;
-    tags?: string[];
-  };
-  action: "Create" | "Update";
-};
 const PostForm = ({ post }: PostFormProps) => {
   const { mutateAsync: createPost, isPending: isLoadingCreate } =
     useCreatePost();
