@@ -16,7 +16,6 @@ import { Loader } from "../../components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
-import { useEffect } from "react";
 import { useUserContext } from "@/context/AuthContext";
 
 const SignInForm = () => {
@@ -127,7 +126,7 @@ const SignInForm = () => {
           to={"/sign-up"}
           className="text-primary-500 ml-1 text-small-semi-bold"
         >
-          Log In
+          Sign Up
         </Link>
       </p>
     </Form>

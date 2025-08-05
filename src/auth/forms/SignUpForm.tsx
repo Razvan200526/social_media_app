@@ -25,10 +25,9 @@ const SignUpForm = () => {
   const { mutateAsync: createUserAccount, isPending: isCreatingAccount } =
     useCreateUserAccount();
 
-  const { mutateAsync: signInAccount, isPending: isSigningIn } =
-    useSignInAccount();
+  const { mutateAsync: signInAccount } = useSignInAccount();
 
-  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const { checkAuthUser } = useUserContext();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
@@ -146,7 +145,7 @@ const SignUpForm = () => {
           to={"/sign-in"}
           className="text-primary-500 ml-1 text-small-semi-bold"
         >
-          Sign In
+          Log In
         </Link>
       </p>
     </Form>

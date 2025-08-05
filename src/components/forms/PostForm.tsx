@@ -15,13 +15,23 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/FileUploader";
 import { PostValidation } from "@/lib/validation";
-import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
+import {
+  useCreatePost,
+  useUpdatePost,
+} from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 import { toast } from "sonner";
-import type { PostFormProps } from "@/types";
+import type { Models } from "appwrite";
 
+type PostFormProps = {
+  post?: Models.Document;
+  action?: "Create" | "Update";
+};
 const PostForm = ({ post, action }: PostFormProps) => {
-  const { mutateAsync: createPost } = useCreatePost();
+  const { mutateAsync: createPost, isPending: isCreatingPost } =
+    useCreatePost();
+  const { mutateAsync: UpdatePost, isPending: isUpdatingPost } =
+    useUpdatePost();
   const navigate = useNavigate();
   const { user } = useUserContext();
   const form = useForm<z.infer<typeof PostValidation>>({
@@ -37,6 +47,21 @@ const PostForm = ({ post, action }: PostFormProps) => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof PostValidation>) {
     try {
+      if (post && action === "Update") {
+        const updatedPost = await UpdatePost({
+          ...values,
+          postId: post.$id,
+          imageId: post?.imageId,
+          imageUrl: post?.imageUrl,
+        });
+
+        if (!updatedPost) {
+          toast("Please try again !");
+          throw Error;
+        }
+        navigate(`/posts/${post.$id}`);
+        return;
+      }
       const newPost = await createPost({
         ...values,
         userId: user.id,
@@ -130,8 +155,10 @@ const PostForm = ({ post, action }: PostFormProps) => {
           <Button
             type="submit"
             className="shad-button_primary whitespace-nowrap"
+            disabled={isCreatingPost || isUpdatingPost}
           >
-            Submit
+            {isCreatingPost || (isUpdatingPost && "Loading...")}
+            {action === "Create" ? "Create Post" : "Update Post"}
           </Button>
         </div>
       </form>

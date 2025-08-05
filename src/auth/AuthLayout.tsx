@@ -1,7 +1,7 @@
-import { useState } from "react"
-import { Outlet, Navigate } from "react-router-dom"
+import { useState } from "react";
+import { Outlet, Navigate } from "react-router-dom";
 const AuthLayout = () => {
-  const [isAuth, _setIsAuth] = useState<boolean>(false);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
   return (
     <>
       {isAuth ? (
@@ -11,13 +11,15 @@ const AuthLayout = () => {
           <section className="flex flex-1 items-center justify-center flex-col py-10">
             <Outlet />
           </section>
-          <img src="/assets/images/side-img.svg"
+          <img
+            src="/assets/images/side-img.svg"
             alt="logo"
-            className="hidden xl:block h-screen w-1/2 object-cover bg-no-repeat" />
+            className="hidden xl:block h-screen w-1/2 object-cover bg-no-repeat"
+          />
         </>
       )}
     </>
-  )
-}
+  );
+};
 
-export default AuthLayout
+export default AuthLayout;
