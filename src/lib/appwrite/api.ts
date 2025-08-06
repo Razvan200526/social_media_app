@@ -387,3 +387,19 @@ export async function searchPosts(searchTerm: string) {
 		throw error;
 	}
 }
+
+export async function getUsers() {
+	try {
+		const users = await databases.listDocuments(
+			appwriteConfig.databaseId,
+			appwriteConfig.userCollectionId,
+		);
+		if (!users) {
+			throw Error;
+		}
+		console.log(users);
+		return users;
+	} catch (error) {
+		console.log(error, "Users not found");
+	}
+}

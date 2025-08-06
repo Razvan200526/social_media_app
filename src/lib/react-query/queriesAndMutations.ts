@@ -3,7 +3,6 @@ import {
 	useMutation,
 	useQuery,
 	useQueryClient,
-	//QueryClient,
 } from "@tanstack/react-query";
 import type { INewPost, INewUser, IUpdatePost } from "@/types";
 import {
@@ -15,6 +14,7 @@ import {
 	getInfinitePosts,
 	getPostById,
 	getRecentPosts,
+	getUsers,
 	likePost,
 	savePost,
 	searchPosts,
@@ -169,11 +169,17 @@ export const useGetPost = () => {
 		queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
 		queryFn: ({ pageParam }) => getInfinitePosts(pageParam),
 		initialPageParam: 1,
-		getNextPageParam: (lastPage: any) => {
+		getNextPageParam: (lastPage: any, allPages: any) => {
 			if (lastPage && lastPage.documents.length === 0) {
 				return null;
 			}
-			const lastPageId = lastPage.documents[lastPage?.documents.length - 1].$id;
+			if (allPages.length > 1) {
+				const previousPage = allPages[allPages.length - 2];
+				if (JSON.stringify(previousPage) === JSON.stringify(lastPage)) {
+					return null;
+				}
+			}
+			const lastPageId = lastPage.documents[lastPage.documents.length - 1].$id;
 			return lastPageId;
 		},
 	});
@@ -181,8 +187,15 @@ export const useGetPost = () => {
 
 export const useSearchPosts = (searchTerm: string) => {
 	return useQuery({
-		queryKey: [QUERY_KEYS.SEARCH_POSTS],
+		queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
 		queryFn: () => searchPosts(searchTerm),
 		enabled: !!searchTerm && searchTerm.length > 0,
+	});
+};
+
+export const useGetUsers = () => {
+	return useQuery({
+		queryKey: [QUERY_KEYS.GET_USERS],
+		queryFn: () => getUsers(),
 	});
 };

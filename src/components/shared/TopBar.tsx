@@ -9,7 +9,7 @@ const TopBar = () => {
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (isSuccess) navigate(0);
-	}, [isSuccess]);
+	}, [isSuccess, navigate]);
 
 	const { user } = useUserContext();
 	return (
